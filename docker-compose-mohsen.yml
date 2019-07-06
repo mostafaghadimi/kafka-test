@@ -5,17 +5,18 @@ services:
     container_name: spark
     image: bde2020/spark-master
     ports: 
-      - 7077:7077
-      - 8080:8080
-      - 6066:6066
+      - 9180:8080
+      - 9177:7077
+      - 9181:8081
   elassandra:
     image: strapdata/elassandra
     container_name: elassandra
     build: /home/ubuntu/Docker/cassandra
     env_file:
       - /home/ubuntu/Docker/cassandra/conf/cassandra.env
-#    volumes:
-#       - /home/ubuntu/Docker/cassandra/jarfile:/var/lib/docker/volumes/data/_data
+    volumes:
+      - /home/ubuntu/Docker/cassandra/jarfile:/var/lib/docker/volumes/data/_data
+      - /home/ubuntu/Docker/cassandra/mostafa-hosein:/var/lib/docker/volumes/data/python
     ports:
       - '7000:7000'
       - '7001:7001'

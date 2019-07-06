@@ -1,9 +1,19 @@
+import random
+import string
+
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 import pyspark_cassandra
 from pyspark_cassandra import streaming
 from datetime import datetime
+
+
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
 
 # 1. install requirements.txt
 # set up Spark and Cassandra
@@ -28,20 +38,19 @@ kafkaStream = KafkaUtils.createStream(ssc,
 
 raw = kafkaStream.flatMap(lambda kafkaS: [kafkaS])
 time_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
-clean = raw.map(lambda xs: xs[1].split(","))
+# clean = raw.map(lambda xs: xs[1].split(","))
 
 # Match cassandra table fields with dictionary keys
 # this reads input of format: x[partition, timestamp]
-my_row = clean.map(lambda x: {
-      "testid": "test",
-      "time1": x[1],
-      "time2": time_now,
-      "delta": (datetime.strptime(x[1], '%Y-%m-%d %H:%M:%S.%f') -
-       datetime.strptime(time_now, '%Y-%m-%d %H:%M:%S.%f')).microseconds,
-      })
+my_row = raw.map(lambda x: {
+      "testid": str(x),
+      "date": randomString(),
+      "time1": time_now,
+      "time2": time_now
+})
 
 # save to cassandra
-my_row.saveToCassandra("KEYSPACE", "TABLE_NAME")
+my_row.saveToCassandra("tutorialspoint", "test1")
 
 ssc.start()             # Start the computation
 ssc.awaitTermination()  # Wait for the computation to terminate
