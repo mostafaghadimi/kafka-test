@@ -53,7 +53,7 @@ delay = 5
 data = {'linechart': {'wikidata': 0, 'wiktionary': 0, 'wikipedia': 0, 'wikimedia': 0}, 'languages': {}, 'wordcloud': ''}
 
 for event in EventSource(url):
-    producer.send('test', key=b'counter', value=b'event')
+    producer.send('test', value= json.dumps(event.data).encode('utf-8'))
     counter += 1
     
     if event.event == 'message':
