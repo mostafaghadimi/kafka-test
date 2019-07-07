@@ -53,7 +53,7 @@ delay = 5
 data = {'linechart': {'wikidata': 0, 'wiktionary': 0, 'wikipedia': 0, 'wikimedia': 0}, 'languages': {}, 'wordcloud': ''}
 
 for event in EventSource(url):
-    producer.send('test', value= json.dumps(event.data).encode('utf-8'))
+    producer.send('test', value=json.dumps(event.data).encode('utf-8'))
     counter += 1
     
     if event.event == 'message':
@@ -79,7 +79,6 @@ for event in EventSource(url):
                 data['languages'][language] += 1
             except:
                 data['languages'][language] = 1
-            
 
         if wikimedia in change['server_url']:
             data['linechart'][wikimedia] += 1
@@ -96,7 +95,7 @@ for event in EventSource(url):
         start_time = time.time()
         data = {'linechart': {'wikidata': 0, 'wiktionary': 0, 'wikipedia': 0, 'wikimedia': 0}, 'languages': {'English':0, 'German':0, 'French':0, 'Spanish':0, 'Russian':0, 'Russian':0, 'Japanese':0, 'Dutch':0, 'Italian':0, 'Swedish':0, 'Polish':0, 'Vietnamese':0, 'Portuguese':0 , 'Arabic':0, 'Other':0}, 'wordcloud': ''}
         # mydb.commit()
-	
+
 
 
 

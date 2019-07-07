@@ -1,4 +1,4 @@
-from _datetime import datetime
+from datetime import datetime
 import random
 import string
 
@@ -8,28 +8,29 @@ from pyspark.streaming.kafka import KafkaUtils
 
 import pyspark_cassandra
 from pyspark_cassandra import streaming
-# from pyspark_cassandra.streaming import saveToCassandra
-
 
 # spark-submit
-# --master local[2] --packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.4.3,anguenot:pyspark-cassandra:0.10.1
+# --master local
+# --packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.4.1,anguenot:pyspark-cassandra:0.10.1
+# ksc_streamer.py
+
 
 def random_string(string_length=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(string_length))
 
 
-# or for master: "spark://MASTER:7077"
+# "spark://MASTER:7077"
 conf = SparkConf() \
     .setAppName("Streaming test") \
-    .set("spark.cassandra.connection.host", "127.0.0.1")
+    .set("spark.cassandra.connection.host", "elassandra")
 sc = SparkContext(conf=conf)
 ssc = StreamingContext(sc, 5)
 
 topic = "test"
 kafka_stream = KafkaUtils.createStream(ssc,
                                        # Zookeeper quorum (hostname:port,hostname:port,..)
-                                       "localhost:9092",
+                                       "zookeeper:2181",
                                        # group ID
                                        "topic",
                                        # topics with their corresponding partition
