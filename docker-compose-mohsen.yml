@@ -10,6 +10,10 @@ services:
       - 9181:8081
     links: 
       - elassandra
+    volumes:
+      - /home/ubuntu/Docker/cassandra/mostafa-hosein:/var/lib/docker/volumes/data/python
+    #   - :shared-volume
+      
     
   elassandra:
     image: strapdata/elassandra
@@ -19,7 +23,7 @@ services:
       - /home/ubuntu/Docker/cassandra/conf/cassandra.env
     volumes:
       - /home/ubuntu/Docker/cassandra/jarfile:/var/lib/docker/volumes/data/_data
-      - /home/ubuntu/Docker/cassandra/mostafa-hosein:/var/lib/docker/volumes/data/python
+      # - shared-volume:/var/lib/docker/volumes/data/python
     ports:
       - '7000:7000'
       - '7001:7001'
@@ -29,3 +33,5 @@ services:
       - '9160:9160'
       - '9200:9200'
       - '9300:9300'
+# volumes: 
+#   shared-volume: {}
