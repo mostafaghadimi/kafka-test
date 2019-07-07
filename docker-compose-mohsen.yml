@@ -8,6 +8,9 @@ services:
       - 9180:8080
       - 9177:7077
       - 9181:8081
+    links: 
+      - elassandra
+    
   elassandra:
     image: strapdata/elassandra
     container_name: elassandra
