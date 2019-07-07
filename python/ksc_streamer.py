@@ -23,14 +23,14 @@ def random_string(string_length=10):
 # "spark://MASTER:7077"
 conf = SparkConf() \
     .setAppName("Streaming test") \
-    .set("spark.cassandra.connection.host", "localhost")
+    .set("spark.cassandra.connection.host", "elassandra")
 sc = SparkContext(conf=conf)
 ssc = StreamingContext(sc, 5)
 
 topic = "test"
 kafka_stream = KafkaUtils.createStream(ssc,
                                        # Zookeeper quorum (hostname:port,hostname:port,..)
-                                       "localhost:9092",
+                                       "zookeeper:2181",
                                        # group ID
                                        "topic",
                                        # topics with their corresponding partition
