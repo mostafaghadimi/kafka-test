@@ -1,0 +1,17 @@
+# docker-compose.yml
+version: '2'
+services:
+ elassandra:
+    build: .
+    env_file:
+      - /home/ubuntu/Docker/cassandra/conf/cassandra.env
+#    volumes:
+#        - /home/ubuntu/Docker/cassandra/jarfile:/var/lib/docker/volumes/data/_data
+    ports:
+      - '7000:7000'
+      - '7001:7001'
+      - '7199:7199'
+      - '9042:9042'
+      - '9142:9142'
+      - '9160:9160'
+      - '9200:9200'

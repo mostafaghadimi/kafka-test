@@ -1,0 +1,84 @@
+version: '2'
+
+# volumes: 
+#   alertmanager:
+
+services:
+  spark:
+    container_name: spark
+    image: bde2020/spark-master
+    ports: 
+      - 9180:8080
+      - 9177:7077
+      - 9181:8081
+    links: 
+      - elassandra
+    volumes:
+      # - /home/ubuntu/Docker/cassandra/mostafa-hosein:/var/lib/docker/volumes/data/python
+      - /home/mostafa/Desktop/kafka-test/together/cassandra/mostafa-hosein:/var/lib/docker/volumes/data/python
+
+      
+    
+  elassandra:
+    image: strapdata/elassandra
+    container_name: elassandra
+    build: /home/mostafa/Desktop/kafka-test/together/cassandra
+    # build:  /home/ubuntu/Docker/cassandra
+    env_file:
+    # - /home/ubuntu/Docker/cassandra
+      - /home/mostafa/Desktop/kafka-test/together/cassandra/conf/cassandra.env
+    volumes:
+      # - /home/ubuntu/Docker/cassandra/jarfile:/var/lib/docker/volumes/data/_data
+      - /home/mostafa/Desktop/kafka-test/together/cassandra/jarfile:/var/lib/docker/volumes/data/_data
+    ports:
+      - '7000:7000'
+      - '7001:7001'
+      - '7199:7199'
+      - '9042:9042'
+      - '9142:9142'
+      - '9160:9160'
+      - '9200:9200'
+      - '9300:9300'
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  
+  kafka:
+    build: .
+    container_name: kafka
+    links:
+     - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OPTS: -javaagent:/usr/app/jmx_prometheus_javaagent.jar=7071:/usr/app/prom-jmx-agent-config.yml
+      CONNECTORS: elassandra
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on: 
+      - elassandra
+
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   ports:
+  #     - 9090:9090
+  #   volumes:  
+  #     - ./mount/prometheus:/etc/prometheus
+  #     - ./alertmanager/alert.rules:/alertmanager/alert.rules
+  #   links:
+  #     - kafka
+  
+  # alertmanager:
+  #   image: prom/alertmanager
+  #   container_name: alertmanager
+  #   ports:
+  #     - "9093:9093"
+  #   volumes:
+  #     - alertmanager:/alertmanager
