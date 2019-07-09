@@ -1,4 +1,1 @@
-.idea/
-.idea
-venv/
-.venv
+./together/Kafka-Spark-Cassandra/kafka-connect-cassandra-1.2.1-2.1.0-all.jar
