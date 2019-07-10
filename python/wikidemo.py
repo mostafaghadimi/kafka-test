@@ -45,7 +45,7 @@ wiktionary = 'wiktionary'
 wikipedia = 'wikipedia'
 wikimedia = 'wikimedia'
 
-producer = KafkaProducer(bootstrap_servers='localhost:9092')
+# producer = KafkaProducer(bootstrap_servers='localhost:9092')
 counter = 0
 
 start_time = time.time()
@@ -53,11 +53,15 @@ delay = 5
 data = {'linechart': {'wikidata': 0, 'wiktionary': 0, 'wikipedia': 0, 'wikimedia': 0}, 'languages': {}, 'wordcloud': ''}
 
 for event in EventSource(url):
-    producer.send('test', value=json.dumps(event.data).encode('utf-8'))
+    # producer.send('test', value=json.dumps(event.data).encode('utf-8'))
     counter += 1
     
     if event.event == 'message':
         try:
+            value = json.dumps(event.data)
+
+            load_value = json.loads(value)
+            load_value = json.loads(load_value)
             change = json.loads(event.data)
         except ValueError:
             continue
