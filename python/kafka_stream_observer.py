@@ -4,7 +4,7 @@ from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 
 sc = SparkContext(appName='KafkaSparkStream')
-ssc = StreamingContext(sc, 60)
+ssc = StreamingContext(sc, 6)
 
 topic = "hossein"
 broker = "kafka:9092"

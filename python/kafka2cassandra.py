@@ -1,5 +1,5 @@
 # sample json:
-# {"employee": {"name": "chert", "salary": 56000, "married": true}}
+# {"employee": {"name": "hossein", "salary": 56000, "married": true}}
 import sys
 from kafka import KafkaConsumer
 import json
