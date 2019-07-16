@@ -18,5 +18,10 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+#    to make kafka topics persistent but it seems it doesn't work.
+#    the whole such persistency concept must be checked whether it is possible at all.
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - kafka:/kafka
+volumes:
+  kafka:

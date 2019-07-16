@@ -4,13 +4,29 @@ import sys
 from kafka import KafkaConsumer
 import json
 from cassandra.cluster import Cluster
+from kafka.errors import NoBrokersAvailable
 
-consumer = KafkaConsumer('hossein', bootstrap_servers="kafka:9092")
+hosts = [
+    '192.168.123.4:9094',   # master
+    '192.168.123.25:9094',  # slave1
+    '192.168.123.24:9094',  # slave2
+]
+
+topic_name = 'test'
+
+for i in range(len(hosts)):
+    try:
+        consumer = KafkaConsumer(topic_name, bootstrap_servers=hosts[i])
+    except NoBrokersAvailable:
+        if i == len(hosts) - 1:
+            raise
+        print('broker #', (i + 1), 'is not available')
+    else:
+        break
 
 cluster = Cluster(['localhost'])
 session = cluster.connect('kafkacassandra')
 
-# start the loop
 try:
     print("hello!!!!!!!!!")
     for message in consumer:
